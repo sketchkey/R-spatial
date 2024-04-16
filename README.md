@@ -1,2 +1,2 @@
 # R-spatial
-Repo of code for working with spatial data in R
+Code for working with different types of spatial data in R
