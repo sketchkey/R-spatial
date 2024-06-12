@@ -1,5 +1,5 @@
 # R-spatial
-Code for working with different types of spatial data in R
+This repo contains code for working with a bunch of different types of spatial data in R
 
 ### Script overview
 - [gwfr_example_kdes.R](gfwr_example_kdes.R) - making kernel density maps from fishing vessel data
