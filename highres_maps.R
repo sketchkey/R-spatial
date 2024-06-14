@@ -16,7 +16,7 @@ curl::curl_download(url = "https://osmdata.openstreetmap.de/download/land-polygo
                     quiet = FALSE) #show progress
 # Can also be done manually by going to: https://osmdata.openstreetmap.de/download/land-polygons-complete-4326.zip
 
-# Unzip the downloaded file and delete the zip (unhash - optional)
+# Unzip the downloaded file and delete the zip (unhash file.remove line - optional)
 unzip(zipfile = here("land_polygons.zip"), #zip file to extract
       exdir = here("land_shapefiles"), #destination folder
       junkpaths = TRUE) #use directory folder name (not folder from zip)
