@@ -2,7 +2,7 @@
 #--- Using {eks} for calculating spatial overlap of KDEs ---#
 #############################################################|
 
-#Personal disclaimer: This script is a work in progress and has not been fully tested/verified!
+# Personal disclaimer: This script is a work in progress and has not been fully tested/verified!
 
 # Load packages
 if(!require(pacman)) install.packages("pacman")
@@ -35,7 +35,7 @@ ggplot(data = spatial_skde, aes(geometry = geometry, group = id)) +
   theme_bw(base_size = 9) +
   theme(strip.background =element_rect(fill="grey95"))
 
-#turn spherical geometry off - temp fixing when using unprojected data
+# Turn spherical geometry off - temp fixing when using unprojected data
 sf::sf_use_s2(FALSE)
 
 # Calculate spatial intersection (95% KDE)
@@ -53,6 +53,7 @@ prop_overlap <- (sf::st_area(spatial_intersection) / sf::st_area(spatial_overlap
 spatial_skde_final <- spatial_skde %>%
   mutate(id_contlabel = paste(id, contlabel, sep = "_"))
 
+# Plot final KDEs with overlap
 ggplot(data = spatial_skde_final, aes(geometry = geometry, group = id)) + 
   geom_sf(aes(fill = id_contlabel, colour = id_contlabel)) +
   geom_sf(data = spatial_intersection, fill = "grey20", colour = "black", alpha = 0.5) +
