@@ -6,7 +6,7 @@
 # osmdata provides this in several formats and projections
 # To see what is available go to: https://osmdata.openstreetmap.de/data/
 
-# Load packageshttp://127.0.0.1:37723/graphics/plot_zoom_png?width=965&height=900
+# Load packages
 if(!require(pacman)) install.packages("pacman")
 pacman::p_load(here, curl, osmdata, tidyverse, sf, ggspatial)
 
