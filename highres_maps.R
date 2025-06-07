@@ -54,13 +54,14 @@ UK_map <- ggplot() +
   geom_sf(data = basemap_simple, fill = "darkseagreen", colour = NA) + #plot country polygons
   geom_sf(data = cities, colour = "tomato3", size = 1) + #plot cities
   coord_sf(expand = FALSE, xlim = c(-12, 2.5), ylim = c(49.5, 61)) + #specify plot limits
-  scalebar_km + #add scale bar
-  labs(subtitle = "UK cities") #add subtitle
+  theme_bw(base_size = 9) +
+  scalebar_km #add scale bar
 UK_map #print map to have a look
 
-# Save the map as png
-ggsave(plot = UK_map, filename = here("UK_map.png"), 
-       width = 10, height = 14, units = "cm", dpi = 200) #size and resolution
+# save the map as png
+ggsave(UK_map, filename = here("plots","highres_maps.png"),
+       width = 10, height = 14, 
+       units = "cm", dpi = 300)
 
 # Cropping high resolution world basemap to smaller custom area (e.g. Isle of Man)
 # https://norbertrenner.de/osm/bbox.html is a good place to get custom lat-lon coords

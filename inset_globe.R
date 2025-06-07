@@ -69,7 +69,7 @@ basemap <- ggplot() +
                               bar_cols = c("grey30","grey30"), 
                               line_col="grey30", 
                               text_col="grey30") +
-  theme_bw() +
+  theme_bw(base_size = 9) +
   NULL
 basemap
 
@@ -235,6 +235,6 @@ final_map <- basemap +
 final_map
 
 # save the map if needed
-ggsave(final_map, filename = here("inset_globe.png"),
-        width = 22, height = 15, 
+ggsave(final_map, filename = here("plots","inset_globe.png"),
+        width = 16, height = 10, 
         units = "cm", dpi = 300)

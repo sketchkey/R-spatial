@@ -44,10 +44,13 @@ final <- simple +
   tidyterra::geom_spatraster(data = occurrence_5km) +
   scale_fill_manual(values = c("NA","plum")) + #specifying no colour for zeroes in raster
   geom_sf(data = occurrence, colour = "black", pch=20, cex=0.01) + #add original record points to plot
+  theme_bw(base_size = 9) +
   coord_sf(x = c(-706761, -472639), y = c(6430637, 6600000)) #specify limits (projected crs)
 
 #save the plot as a png
-ggsave(final, filename = here("occurrence_1km.png"))
+ggsave(final, filename = here("plots","terra_rasterizing.png"),
+       width = 16, height = 12, 
+       units = "cm", dpi = 300)
   
 ###########################|
 # Rasterize line object ---#

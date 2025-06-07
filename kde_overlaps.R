@@ -54,7 +54,7 @@ spatial_skde_final <- spatial_skde %>%
   mutate(id_contlabel = paste(id, contlabel, sep = "_"))
 
 # Plot final KDEs with overlap
-ggplot(data = spatial_skde_final, aes(geometry = geometry, group = id)) + 
+skde_map <- ggplot(data = spatial_skde_final, aes(geometry = geometry, group = id)) + 
   geom_sf(aes(fill = id_contlabel, colour = id_contlabel)) +
   geom_sf(data = spatial_intersection, fill = "grey20", colour = "black", alpha = 0.5) +
   geom_text(x = 19.75, y = -34.0, aes(label = paste("KDE overlap:", round(prop_overlap, 2), "%")), colour = "grey30", size = 3.5) +
@@ -63,3 +63,8 @@ ggplot(data = spatial_skde_final, aes(geometry = geometry, group = id)) +
   labs(x = "Longitude", y = "Latitude", fill = "KDE", colour = "KDE") +
   theme_bw(base_size = 9) +
   theme(strip.background = element_rect(fill="grey95"))
+
+# save the map as png
+ggsave(skde_map, filename = here("plots","kde_overlaps.png"),
+       width = 12, height = 10, 
+       units = "cm", dpi = 300)
