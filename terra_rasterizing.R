@@ -4,7 +4,8 @@
 
 # Load packages
 if(!require(pacman)) install.packages("pacman")
-pacman::p_load(here, tidyverse, sf, terra, tidyterra, rnaturalearth, rnaturalearthdata, rnaturalearthhires)
+pacman::p_load(here, tidyverse, sf, terra, tidyterra, patchwork,
+               rnaturalearth, rnaturalearthdata, rnaturalearthhires)
 
 #define chosen projection with st_crs (optional)
 #laea = st_crs("+proj=laea +lat_0=30 +lon_0=-95") #custom crs for lambert azimuthal equal area projection
@@ -19,7 +20,9 @@ shapefile <- ne_countries(scale = "large", returnclass = "sf") %>%
 simple <- ggplot() +
   geom_sf(data = shapefile, fill = "white", colour = "black") +
   #lims(x = c(-706761, -472639), y = c(6430637, 6600000)) +
-  theme(panel.background = element_rect(fill = "azure2"))
+  theme_bw(base_size = 9) +
+  theme(panel.background = element_rect(fill = "azure2"),
+        panel.grid.major = element_line(colour = "white"))
 
 #read in/create dataset of occurrence points
 occurrence <- shapefile %>%
@@ -39,18 +42,16 @@ occurrence_5km <- terra::rasterize(occurrence, raster_template) %>%
   subst(., NA, 0) %>% #substituting all NA's with zeroes
   mutate(last = as.factor(last)) #check if last column is a factor
 
-#finally add the rasterised data to the simple plot (using tidyterra::geom_spatraster)
-final <- simple + 
+#finally add the rasterised data to the simple plot
+full <- simple + 
   tidyterra::geom_spatraster(data = occurrence_5km) +
-  scale_fill_manual(values = c("NA","plum")) + #specifying no colour for zeroes in raster
+  scale_fill_manual(values = c("NA","plum"), labels = c("No", "Yes")) + #specifying no colour for zeroes in raster
   geom_sf(data = occurrence, colour = "black", pch=20, cex=0.01) + #add original record points to plot
+  labs(fill = "Presence") +
+  coord_sf(x = c(-706761, -472639), y = c(6430637, 6600000)) + #specify limits (projected crs)
   theme_bw(base_size = 9) +
-  coord_sf(x = c(-706761, -472639), y = c(6430637, 6600000)) #specify limits (projected crs)
-
-#save the plot as a png
-ggsave(final, filename = here("plots","terra_rasterizing.png"),
-       width = 16, height = 12, 
-       units = "cm", dpi = 300)
+  theme(panel.background = element_rect(fill = "azure2"),
+        panel.grid.major = element_line(colour = "white"))
   
 ###########################|
 # Rasterize line object ---#
@@ -61,12 +62,26 @@ coastline_raster <- st_cast(shapefile,"MULTILINESTRING") %>% #turn polygon into 
   terra::rasterize(., raster_template) %>% #rasterize the line
   subst(., NA, 0) #substituting all NA's with zeroes
 
-#compare occurrence records to coastline and create new raster where cells match
-coastline_records <- terra::compare(occurrence_5km, coastline_raster, "==", TRUE)
+# Compare and convert logical to numeric (1 = overlap, NA = no match)
+coastline_records <- occurrence_5km * coastline_raster
+coastline_records[coastline_records <= 1] <- NA
+coastline_records <- as.factor(coastline_records)
 
 #add the new coastline records raster to the plot
-simple + 
-  tidyterra::geom_spatraster(data = coastline_records) +
-  scale_fill_manual(values = c("brown2"), na.value = NA) + #specifying no colour for zeroes in raster
+coastline <- simple +  
+  geom_spatraster(data = coastline_records) + 
+  scale_fill_manual(values = c("2" = "brown2"), 
+                    labels = c("Yes", "No"), 
+                    na.value = NA) + #specifying no colour for zeroes in raster
+  labs(fill = "Coastline \nintersection") + #rename legend
   coord_sf(x = c(-706761, -472639), y = c(6430637, 6600000)) #specify limits (projected crs)
+
+# combined plot with coastline and occurrence records
+final <- full / coastline
+final
+
+#save the full plot as a png
+ggsave(final, filename = here("plots","terra_rasterizing.png"),
+       width = 12, height = 14, 
+       units = "cm", dpi = 300)
 
