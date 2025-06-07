@@ -212,9 +212,9 @@ inset_map <- ggplot() +
   geom_raster(data = shading_df, aes(x = x, y = y, alpha = alpha), 
               fill = "black", interpolate = TRUE, show.legend = FALSE) +
   scale_alpha(range = c(0, 0.3)) +
-  geom_sf(data = st_as_sf(buffer_circle_ortho), fill = NA, color = "grey50", linewidth = 0.05) +
+  geom_sf(data = st_as_sf(buffer_circle_ortho), fill = NA, color = "grey50", linewidth = 0.3) +
   geom_sf(data = st_as_sfc(bbox),   #red focal area
-          aes(geometry = geometry), fill = NA, colour = "red", linewidth = 0.5) +
+          aes(geometry = geometry), fill = NA, colour = "red", linewidth = 0.4) +
   coord_sf(crs = crs_ortho) +
   theme_void() +
   NULL
