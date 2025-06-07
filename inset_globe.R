@@ -235,6 +235,6 @@ final_map <- basemap +
 final_map
 
 # save the map if needed
-ggsave(final_map, filename = here("new_map.png"),
+ggsave(final_map, filename = here("inset_globe.png"),
         width = 22, height = 15, 
         units = "cm", dpi = 300)
