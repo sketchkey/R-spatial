@@ -2,7 +2,7 @@
 #--- Cropping OSM data to make highres maps ---#
 ###############################################|
 
-# OpenStreetMap have a lots of publicly available high-res map data
+# OpenStreetMap have lots of publicly available high-res map data
 # osmdata provides this in several formats and projections
 # To see what is available go to: https://osmdata.openstreetmap.de/data/
 
